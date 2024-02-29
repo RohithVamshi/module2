@@ -1,0 +1,33 @@
+module mux_axi(
+    input [7:0] a,
+    input [7:0] b,
+    input sel,
+    input valid,
+    input ready,
+   
+    input clk,
+    input last,
+    output reg [7:0] out
+    );
+   
+    
+    always @(posedge clk)
+    begin
+
+    if (last)
+    begin
+         out<=8'h00;
+         end
+else
+        
+            if (valid && ready)
+            begin
+                     out <= sel ? b : a;
+           end
+            else
+            if(valid ^ ready)
+            begin
+               out<=0;
+               end
+               end
+endmodule
