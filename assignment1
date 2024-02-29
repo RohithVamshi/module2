@@ -1,0 +1,38 @@
+module register_axi(
+
+   input  [7:0] data,
+    input valid,
+    input ready,    
+    input clk, reset,
+    output  reg [7:0] out
+    );
+    
+   
+ 
+    always @(posedge clk )
+    begin
+         if (~reset)
+                begin
+                       out <= 8'h00;
+                end
+                end
+         always @(posedge clk)
+         
+                begin
+                     if (ready&&valid)
+                     begin
+                         out<=data;
+                            
+                     end
+                     else if(ready^valid)
+                     begin
+                     out<=0;
+                     end
+              
+                    
+                          
+                                                        
+               end  
+                           
+
+endmodule
