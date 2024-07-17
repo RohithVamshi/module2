@@ -1,26 +1,32 @@
 
-module fifo_2048 #(
+module fifo_2048#(
 parameter DataWidth = 16,
     parameter Depth = 2048,
     parameter PtrWidth = 11,
-    parameter MAX_VALUE = Depth
+    parameter MAX_VALUE = Depth-1
 )(
     input [DataWidth-1:0] data_in,
     input clk, rst, 
     input rd, wr,
     output empty,
     output full,
-    output [DataWidth-1:0] wr_data,
     
-    output reg [DataWidth-1:0] data_out
+    
+    output reg[DataWidth-1:0] data_out
 );
-
-reg [PtrWidth+1:0] fifo_cnt;
+ reg [PtrWidth+1:0] fifo_cnt;
     reg [PtrWidth-1:0] rd_ptr;
     reg [PtrWidth-1:0] wr_ptr;
     reg [DataWidth-1:0] fifo [0:Depth-1];
+    integer i;
+    
+    initial 
+    begin
+    for(i=0;i<Depth-1;i=i+1)
+    data_out[i] =0;
+    end
 
-    always @(negedge clk) begin
+    always @(posedge clk) begin
         if (rst) begin
             wr_ptr <= 0;
             rd_ptr <= 0;
@@ -39,7 +45,7 @@ reg [PtrWidth+1:0] fifo_cnt;
     end
 
     // Counter
-    always @(negedge clk) begin
+    always @(posedge clk) begin
         if (rst) begin
             fifo_cnt <= 0;
         end else begin
@@ -55,5 +61,5 @@ reg [PtrWidth+1:0] fifo_cnt;
 
     assign empty = (fifo_cnt == 0) ? 1 : 0;
     assign full = (fifo_cnt == MAX_VALUE) ? 1 : 0;
-  assign wr_data = fifo_cnt;
+
 endmodule
