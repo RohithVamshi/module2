@@ -3,7 +3,7 @@ module fifo_4096#(
 parameter DataWidth = 16,
     parameter Depth = 4096,
     parameter PtrWidth = 12,
-    parameter MAX_VALUE = Depth
+    parameter MAX_VALUE = 2048
 )(
     input clk, rst, 
     input [DataWidth-1:0] data_in,
@@ -14,13 +14,16 @@ parameter DataWidth = 16,
     output  full2,
     output reg empty,
     output reg full,
-    
     output  [DataWidth-1:0] data_out1,
     output  [DataWidth-1:0] data_out2
 );
 
 
 reg w1,w2,r1,r2;
+integer i;
+
+
+   
 
 always@(posedge clk) begin
     if (rst) begin
@@ -38,8 +41,8 @@ always@(posedge clk) begin
 end
 
 
-fifo_2048 fifo1(data_in, clk, rst, r1, w1,empty1,full1,data_out1);
-fifo_2048 fifo2(data_in, clk, rst, r2, w2,empty2,full2,data_out2);
+fifo_2048#(DataWidth,Depth, PtrWidth, MAX_VALUE ) fifo1(data_in, clk, rst, r1, w1,empty1,full1,data_out1);
+fifo_2048#(DataWidth,Depth, PtrWidth, MAX_VALUE ) fifo2(data_in, clk, rst, r2, w2,empty2,full2,data_out2);
 
 always @(posedge clk,posedge rst) begin
     if (rst) begin
